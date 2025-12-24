@@ -51,7 +51,7 @@
             <div class="mt-12 bg-blue-50 p-6 rounded-xl border border-blue-100 text-center">
                 <h4 class="font-bold text-lg mb-2">Apply for 2025 Intake</h4>
                 <p class="text-sm text-gray-600 mb-4">Don't miss the deadline. Get free counseling today.</p>
-                <a href="#contact" class="block w-full bg-primary text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition">Contact Us</a>
+                <a href="/contact" class="block w-full bg-primary text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition">Contact Us</a>
             </div>
         </div>
     </div>

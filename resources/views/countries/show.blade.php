@@ -2,20 +2,60 @@
 
 @section('content')
 
-    <div class="relative h-[400px] flex items-center justify-center text-center text-white bg-gray-900">
-        <div class="absolute inset-0 z-0">
-            <img src="{{ $country->cover_image ? Storage::url($country->cover_image) : 'https://source.unsplash.com/random/1200x600/?' . $country->name }}"
-                class="w-full h-full object-cover brightness-50">
-        </div>
+    {{-- Country Header Section --}}
+<div class="w-full bg-white pt-5 pb-10">
+    
+    {{-- Container: Strictly 1400px max width --}}
+    <div class="max-w-[1400px] mx-auto px-4 md:px-6">
+        
+        {{-- Orange Banner --}}
+        <div class="relative w-full bg-gradient-to-r from-[#FF6B35] to-[#FF4B2B] rounded-[30px] overflow-hidden shadow-xl">
+            
+            {{-- 1. Country Image (Blended into the orange) --}}
+            {{-- We use 'mix-blend-overlay' and low opacity to keep the orange theme dominant --}}
+            <div class="absolute inset-0 z-0 opacity-20 mix-blend-overlay">
+                <img src="{{ $country->cover_image ? Storage::url($country->cover_image) : 'https://source.unsplash.com/random/1200x600/?' . $country->name }}"
+                     class="w-full h-full object-cover grayscale">
+            </div>
 
-        <div class="relative z-10 container px-4">
-            <span
-                class="inline-block py-1 px-3 rounded bg-white/20 backdrop-blur text-sm font-bold mb-4 uppercase tracking-wider">
-                Study In
-            </span>
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-6">{{ $country->name }}</h1>
+            {{-- 2. Decorative Line Pattern --}}
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
+                    <defs>
+                        <pattern id="grid-pattern-country" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M0 40L40 0H20L0 20M40 40V20L20 40" stroke="white" stroke-width="1" fill="none"/>
+                        </pattern>
+                    </defs>
+                    <path d="M0,400 C200,300 100,50 400,0 L0,0 Z" fill="url(#grid-pattern-country)" />
+                </svg>
+            </div>
+
+            {{-- 3. Content --}}
+            <div class="relative z-10 py-16 md:py-24 text-center text-white">
+                
+                {{-- Badge --}}
+                <span class="inline-block py-1.5 px-4 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-sm font-bold mb-6 uppercase tracking-wider shadow-sm">
+                    Study In
+                </span>
+
+                {{-- Title --}}
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight drop-shadow-md">
+                    {{ $country->name }}
+                </h1>
+                
+                {{-- Breadcrumbs --}}
+                <div class="flex items-center justify-center gap-2 text-sm md:text-base font-medium opacity-90">
+                    <a href="/" class="hover:underline hover:text-gray-100 transition">Home</a>
+                    <span>/</span>
+                    <a href="{{ route('countries.index') }}" class="hover:underline hover:text-gray-100 transition">Destinations</a>
+                    <span>/</span>
+                    <span>{{ $country->name }}</span>
+                </div>
+
+            </div>
         </div>
     </div>
+</div>
 
     <div class="max-w-[1400px] mx-auto px-4 py-16 grid md:grid-cols-3 gap-12">
 
