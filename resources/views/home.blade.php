@@ -530,37 +530,67 @@
 </style>
 @endif
 
-    {{-- 6. TESTIMONIALS --}}
-    <section class="py-20 bg-white">
-        <div class="max-w-[1400px] mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-16">What Students Say</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                @foreach($testimonials as $testi)
-                <div class="bg-gray-50 p-8 rounded-2xl relative">
-                    <div class="absolute -top-4 -left-4 w-10 h-10 bg-secondary text-white flex items-center justify-center rounded-full text-xl font-serif">
-                        "
-                    </div>
-                    
-                    <p class="text-gray-600 italic mb-6 leading-relaxed">"{{ $testi->content }}"</p>
-                    
-                    <div class="flex items-center gap-4 border-t border-gray-200 pt-6">
-                        <div class="w-12 h-12 bg-gray-300 rounded-full overflow-hidden">
-                            @if($testi->avatar)
-                                <img src="{{ Storage::url($testi->avatar) }}" class="w-full h-full object-cover">
-                            @else
-                                <img src="https://ui-avatars.com/api/?name={{ $testi->name }}&background=random" class="w-full h-full">
-                            @endif
+    {{-- 6. TESTIMONIALS SLIDER --}}
+    <section class="py-20 bg-white relative">
+        
+        {{-- Background Decoration --}}
+        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 translate-y-1/2 -translate-x-1/2"></div>
+
+        <div class="max-w-[1400px] mx-auto px-4 relative z-10">
+            
+            {{-- Header --}}
+            <div class="text-center mb-12">
+                <span class="text-secondary font-bold tracking-wider uppercase text-sm mb-2 block">Student Voices</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">What Our Students Say</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
+            </div>
+
+            {{-- Slider Container --}}
+            <div class="swiper testimonial-slider !pb-12">
+                <div class="swiper-wrapper">
+                    @foreach($testimonials as $testi)
+                        <div class="swiper-slide h-auto">
+                            <div class="bg-gray-50 p-8 rounded-3xl h-full flex flex-col relative group hover:bg-white hover:shadow-xl transition-all duration-300 border border-transparent hover:border-gray-100">
+                                
+                                {{-- Quote Icon --}}
+                                <div class="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 text-white flex items-center justify-center rounded-2xl shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.054 15.196 14.73 17.067 14.717C17.067 14.717 17.915 14.673 18.067 14.654C17.391 13.628 16.039 12.639 14.71 12.639C13.524 12.639 12.999 12.222 12.999 11.233V5H21V12.75C21 16.273 17.585 21 14.017 21ZM5.01697 21L5.01697 18C5.01697 16.054 6.19597 14.73 8.06697 14.717C8.06697 14.717 8.91497 14.673 9.06697 14.654C8.39097 13.628 7.03897 12.639 5.70997 12.639C4.52397 12.639 3.99897 12.222 3.99897 11.233V5H11.999V12.75C11.999 16.273 8.58497 21 5.01697 21Z"></path></svg>
+                                </div>
+                                
+                                {{-- Content --}}
+                                <p class="text-gray-600 italic mb-8 leading-relaxed mt-4 flex-grow">"{{ $testi->content }}"</p>
+                                
+                                {{-- Footer --}}
+                                <div class="flex items-center gap-4 border-t border-gray-200 pt-6 mt-auto">
+                                    <div class="w-14 h-14 rounded-full p-0.5 bg-gradient-to-br from-blue-500 to-purple-500">
+                                        <div class="w-full h-full rounded-full overflow-hidden border-2 border-white bg-white">
+                                            @if($testi->avatar)
+                                                <img src="{{ Storage::url($testi->avatar) }}" class="w-full h-full object-cover">
+                                            @else
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($testi->name) }}&background=random" class="w-full h-full object-cover">
+                                            @endif
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <h4 class="font-bold text-gray-900 group-hover:text-primary transition-colors">{{ $testi->name }}</h4>
+                                        <p class="text-xs text-gray-500 font-medium uppercase tracking-wide">{{ $testi->designation }}</p>
+                                    </div>
+                                    
+                                    <div class="ml-auto flex text-yellow-400 text-sm">
+                                        @for($i=0; $i < $testi->rating; $i++) 
+                                            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                        @endfor
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-gray-900">{{ $testi->name }}</h4>
-                            <span class="text-xs text-primary font-bold">{{ $testi->designation }}</span>
-                        </div>
-                        <div class="ml-auto flex text-yellow-400 text-sm">
-                            @for($i=0; $i < $testi->rating; $i++) ★ @endfor
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
-                @endforeach
+                
+                {{-- Pagination Dots --}}
+                <div class="swiper-pagination testimonial-pagination !bottom-0"></div>
             </div>
         </div>
     </section>
