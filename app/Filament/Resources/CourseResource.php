@@ -110,13 +110,70 @@ class CourseResource extends Resource
     {
         return $table
             ->columns([
-                //
+                // Course Title & University Name
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Course Name')
+                    ->searchable()
+                    ->sortable()
+                    ->description(fn($record): string => $record->university?->name ?? 'No University'),
+
+                // Academic Level Badge
+                Tables\Columns\TextColumn::make('level')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Foundation' => 'gray',
+                        'Undergraduate' => 'info',
+                        'Postgraduate' => 'success',
+                        'PHD' => 'warning',
+                        default => 'gray',
+                    }),
+
+                // Subject Area (Category)
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Subject Area')
+                    ->toggleable()
+                    ->searchable(),
+
+                // Combined Tuition Fee & Currency
+                Tables\Columns\TextColumn::make('tuition_fee')
+                    ->label('Tuition')
+                    ->money(fn($record) => $record->currency ?? 'USD')
+                    ->sortable(),
+
+                // Intake Months
+                Tables\Columns\TextColumn::make('intake_months')
+                    ->label('Intakes')
+                    ->placeholder('Not specified')
+                    ->toggleable(),
+
+                // Duration
+                Tables\Columns\TextColumn::make('duration')
+                    ->icon('heroicon-m-clock')
+                    ->toggleable(),
+
+                // Featured Toggle - Manage visibility directly from the table
+                Tables\Columns\ToggleColumn::make('is_featured')
+                    ->label('Featured'),
             ])
             ->filters([
-                //
+                // Filter by Academic Level
+                Tables\Filters\SelectFilter::make('level')
+                    ->options([
+                        'Foundation' => 'Foundation',
+                        'Undergraduate' => 'Undergraduate',
+                        'Postgraduate' => 'Postgraduate',
+                        'PHD' => 'PhD',
+                    ]),
+
+                // Filter by University
+                Tables\Filters\SelectFilter::make('university_id')
+                    ->relationship('university', 'name')
+                    ->searchable()
+                    ->preload(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

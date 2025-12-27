@@ -28,7 +28,7 @@ class EditGeneralSettings extends Page implements HasForms
     public function mount(): void
     {
         $settings = GeneralSetting::first();
-        
+
         if ($settings) {
             $this->form->fill($settings->toArray());
         }
@@ -51,7 +51,7 @@ class EditGeneralSettings extends Page implements HasForms
                             ->directory('brand'),
                     ])->columns(3),
 
-                // 2. Contact Information (NEW)
+                // 2. Contact Information
                 Section::make('Contact Information (Top Bar)')
                     ->schema([
                         TextInput::make('contact_email')
@@ -63,9 +63,16 @@ class EditGeneralSettings extends Page implements HasForms
                         Textarea::make('contact_address')
                             ->rows(2)
                             ->columnSpanFull(),
+                        
+                        // FIX APPLIED HERE: Removed 'Forms\Components\' prefix
+                        Textarea::make('google_map_code')
+                            ->label('Google Map Embed Code (<iframe>)')
+                            ->helperText('Go to Google Maps -> Share -> Embed a map -> Copy HTML')
+                            ->rows(4)
+                            ->columnSpanFull(),
                     ])->columns(2),
 
-                // 3. Social Media Links (NEW)
+                // 3. Social Media Links
                 Section::make('Social Media Links')
                     ->description('Leave blank to hide the icon from the header.')
                     ->schema([
@@ -111,13 +118,13 @@ class EditGeneralSettings extends Page implements HasForms
                     ])->columns(2),
             ])
             ->statePath('data');
-    } 
+    }
 
     public function save(): void
     {
         $data = $this->form->getState();
         $settings = GeneralSetting::first();
-        
+
         if (!$settings) {
             $settings = GeneralSetting::create($data);
         } else {

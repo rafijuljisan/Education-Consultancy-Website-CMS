@@ -52,23 +52,62 @@ class TestimonialResource extends Resource
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+{
+    return $table
+        ->columns([
+            // Student Avatar - Circular preview
+            Tables\Columns\ImageColumn::make('avatar')
+                ->label('Photo')
+                ->circular(),
+
+            // Student Name & Designation
+            Tables\Columns\TextColumn::make('name')
+                ->label('Student Name')
+                ->searchable()
+                ->sortable()
+                ->description(fn ($record): string => $record->designation ?? ''),
+
+            // Star Rating - Visual representation
+            Tables\Columns\TextColumn::make('rating')
+                ->label('Rating')
+                ->icon('heroicon-m-star')
+                ->color('warning')
+                ->sortable(),
+
+            // Status Toggle - Control website visibility
+            Tables\Columns\ToggleColumn::make('is_active')
+                ->label('Active'),
+
+            // Track submission date
+            Tables\Columns\TextColumn::make('created_at')
+                ->label('Date Added')
+                ->date()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->filters([
+            // Filter by Star Rating
+            Tables\Filters\SelectFilter::make('rating')
+                ->options([
+                    5 => '5 Stars',
+                    4 => '4 Stars',
+                    3 => '3 Stars',
                 ]),
-            ]);
-    }
+
+            // Filter for hidden/active reviews
+            Tables\Filters\TernaryFilter::make('is_active')
+                ->label('Visibility'),
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
 
     public static function getRelations(): array
     {

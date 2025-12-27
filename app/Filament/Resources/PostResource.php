@@ -52,23 +52,66 @@ class PostResource extends Resource
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+{
+    return $table
+        ->columns([
+            // Small preview of the blog thumbnail
+            Tables\Columns\ImageColumn::make('thumbnail')
+                ->label('Image')
+                ->square(),
+
+            // Article title with slug as secondary text
+            Tables\Columns\TextColumn::make('title')
+                ->label('Article Title')
+                ->searchable()
+                ->sortable()
+                ->description(fn ($record): string => $record->slug),
+
+            // Publication date formatted clearly
+            Tables\Columns\TextColumn::make('published_at')
+                ->label('Published On')
+                ->date('M d, Y')
+                ->sortable(),
+
+            // Featured Toggle - Manage highlight status directly from the table
+            Tables\Columns\ToggleColumn::make('is_featured')
+                ->label('Featured'),
+
+            // Track creation date
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->defaultSort('published_at', 'desc') // Show newest articles first
+        ->filters([
+            // Filter to see only featured articles
+            Tables\Filters\TernaryFilter::make('is_featured')
+                ->label('Featured Only')
+                ->boolean(),
+
+            // Filter by publication date range
+            Tables\Filters\Filter::make('published_at')
+                ->form([
+                    \Filament\Forms\Components\DatePicker::make('published_from'),
+                    \Filament\Forms\Components\DatePicker::make('published_until'),
+                ])
+                ->query(function ($query, array $data) {
+                    return $query
+                        ->when($data['published_from'], fn($q) => $q->whereDate('published_at', '>=', $data['published_from']))
+                        ->when($data['published_until'], fn($q) => $q->whereDate('published_at', '<=', $data['published_until']));
+                })
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
 
     public static function getRelations(): array
     {

@@ -42,23 +42,48 @@ class VideoResource extends Resource
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+{
+    return $table
+        ->columns([
+            // Video Thumbnail Preview
+            Tables\Columns\ImageColumn::make('thumbnail')
+                ->label('Preview')
+                ->rounded()
+                ->size(100),
+
+            // Video Title & Provider Info
+            Tables\Columns\TextColumn::make('title')
+                ->label('Video Title')
+                ->searchable()
+                ->sortable()
+                ->description(fn ($record): string => \Illuminate\Support\Str::limit($record->video_url, 50)),
+
+            // Homepage Visibility Toggle
+            Tables\Columns\ToggleColumn::make('is_featured')
+                ->label('Featured'),
+
+            // Track creation date
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->filters([
+            // Filter to show only featured videos
+            Tables\Filters\TernaryFilter::make('is_featured')
+                ->label('Homepage Featured Only')
+                ->boolean(),
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
 
     public static function getRelations(): array
     {

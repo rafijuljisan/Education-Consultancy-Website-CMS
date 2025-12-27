@@ -41,24 +41,60 @@ class UniversityResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+   public static function table(Table $table): Table
+{
+    return $table
+        ->columns([
+            // University Logo Preview
+            Tables\Columns\ImageColumn::make('logo')
+                ->label('Logo')
+                ->circular(),
+
+            // University Name & City
+            Tables\Columns\TextColumn::make('name')
+                ->label('University Name')
+                ->searchable()
+                ->sortable()
+                ->description(fn ($record): string => $record->city ?? 'Location not set'),
+
+            // Related Country Name
+            Tables\Columns\TextColumn::make('country.name')
+                ->label('Country')
+                ->badge()
+                ->color('info')
+                ->sortable(),
+
+            // Global Ranking with custom icon
+            Tables\Columns\TextColumn::make('ranking')
+                ->label('Global Rank')
+                ->numeric()
+                ->sortable()
+                ->icon('heroicon-m-trophy')
+                ->color('warning'),
+
+            // Track creation
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->filters([
+            // Filter by Country
+            Tables\Filters\SelectFilter::make('country_id')
+                ->relationship('country', 'name')
+                ->searchable()
+                ->preload(),
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
 
     public static function getRelations(): array
     {

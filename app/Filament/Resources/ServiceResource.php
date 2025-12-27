@@ -43,23 +43,53 @@ class ServiceResource extends Resource
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+{
+    return $table
+        ->columns([
+            // Service Icon Preview
+            Tables\Columns\ImageColumn::make('icon')
+                ->label('Icon')
+                ->circular(),
+
+            // Service Title & Description
+            Tables\Columns\TextColumn::make('title')
+                ->label('Service Name')
+                ->searchable()
+                ->sortable()
+                ->description(fn ($record): string => \Illuminate\Support\Str::limit($record->short_description, 50)),
+
+            // Slug for URL reference
+            Tables\Columns\TextColumn::make('slug')
+                ->badge()
+                ->color('gray')
+                ->toggleable(isToggledHiddenByDefault: true),
+
+            // Active Status Toggle
+            Tables\Columns\ToggleColumn::make('is_active')
+                ->label('Active'),
+
+            // Track creation
+            Tables\Columns\TextColumn::make('created_at')
+                ->dateTime()
+                ->sortable()
+                ->toggleable(isToggledHiddenByDefault: true),
+        ])
+        ->filters([
+            // Filter by Active/Inactive
+            Tables\Filters\TernaryFilter::make('is_active')
+                ->label('Service Status')
+                ->boolean(),
+        ])
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}
 
     public static function getRelations(): array
     {

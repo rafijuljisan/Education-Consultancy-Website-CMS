@@ -102,7 +102,7 @@
                     {{-- Optional decorative blob/blur effect behind the image --}}
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-200/50 rounded-full blur-3xl -z-10"></div>
                     
-                    <img src="{{ asset('img/services-side.png') }}" alt="Student with Globe" class="w-full max-w-md mx-auto object-contain drop-shadow-xl transform hover:scale-105 transition-transform duration-500">
+                    <img src="{{ asset('storage/about/student-with-glob.png') }}" alt="Student with Globe" class="w-full max-w-md mx-auto object-contain drop-shadow-xl transform hover:scale-105 transition-transform duration-500">
                 </div>
             </div>
 
@@ -313,122 +313,221 @@
             </div>
         </div>
     </section>
-    {{-- LATEST BLOGS SECTION --}}
+    {{-- LATEST BLOGS SECTION - REDESIGNED --}}
 @if(isset($latest_blogs) && $latest_blogs->count() > 0)
-<section class="py-20 bg-[#003B99] relative overflow-hidden text-white">
+<section class="py-20 bg-[#003B99] relative overflow-hidden">
     
-    {{-- Background Wave Pattern --}}
-    <div class="absolute inset-0 opacity-20 pointer-events-none">
-        <svg class="w-full h-full" viewBox="0 0 1440 800" fill="none">
-            <path d="M-100 800C200 700 400 200 800 400C1200 600 1400 100 1540 0" stroke="url(#grad1)" stroke-width="2" stroke-dasharray="10 10"/>
-            <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#EC4899;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-        </svg>
-        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-900/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+    {{-- Animated Background Elements --}}
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        {{-- Floating Circles --}}
+        <div class="absolute top-20 left-10 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl animate-float-delayed"></div>
+        <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-yellow-400/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        
+        {{-- Grid Pattern --}}
+        <div class="absolute inset-0 opacity-[0.02]" style="background-image: radial-gradient(circle, #000 1px, transparent 1px); background-size: 40px 40px;"></div>
     </div>
 
     <div class="container mx-auto px-4 md:px-6 relative z-10">
         <div class="max-w-[1400px] mx-auto">
             
-            {{-- HEADER ROW --}}
-            <div class="grid lg:grid-cols-12 gap-12 mb-12 items-center">
-                <div class="lg:col-span-5">
-                    <h2 class="text-4xl md:text-5xl font-bold leading-tight mb-8">
-                        Insights, Inspiration,<br>
-                        <span class="text-gray-400">and Innovation.</span>
-                    </h2>
-                    <a href="{{ route('blog.index') }}" class="inline-flex items-center gap-2 bg-yellow-400 text-gray-900 font-bold px-8 py-3 rounded-full hover:bg-yellow-500 transition shadow-lg transform hover:scale-105">
-                        More Articles
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                    </a>
-                </div>
-
-                {{-- FEATURED POST (First Item) --}}
-                <div class="lg:col-span-7">
-                    @php $featured = $latest_blogs->first(); @endphp
-                    @if($featured)
-                    <div class="bg-[#003B99] border border-white/5 rounded-3xl p-6 md:p-8 hover:border-white/20 transition duration-500 group relative overflow-hidden">
-                        {{-- Hover Glow Effect --}}
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl -mr-16 -mt-16 transition group-hover:bg-yellow-400/20"></div>
-
-                        <div class="flex items-center justify-between mb-6 text-sm text-gray-400 relative z-10">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-700 border border-white/10">
-                                    <img src="{{ optional($featured->author)->avatar ? Storage::url($featured->author->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(optional($featured->author)->name ?? 'Admin') }}" class="w-full h-full object-cover">
-                                </div>
-                                <div>
-                                    <p class="font-semibold text-white leading-none">{{ optional($featured->author)->name ?? 'Admin' }}</p>
-                                    <p class="text-xs text-gray-500 mt-1">Author</p>
-                                </div>
-                            </div>
-                            <span class="bg-white/5 px-3 py-1 rounded-full">{{ $featured->created_at->format('M d, Y') }}</span>
-                        </div>
-
-                        <div class="rounded-2xl overflow-hidden mb-6 h-64 md:h-80 w-full relative">
-                            <img src="{{ Storage::url($featured->image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#003B99] via-transparent to-transparent opacity-60"></div>
-                        </div>
-
-                        <h3 class="text-2xl md:text-3xl font-bold mb-4 group-hover:text-yellow-400 transition leading-tight">
-                            <a href="{{ route('blog.show', $featured->slug) }}">
-                                {{ $featured->title }}
-                            </a>
-                        </h3>
-                        
-                        <p class="text-gray-400 mb-6 line-clamp-2">{{ Str::limit(strip_tags($featured->content), 120) }}</p>
-
-                        <a href="{{ route('blog.show', $featured->slug) }}" class="inline-flex items-center text-yellow-400 font-bold hover:text-yellow-300 transition tracking-wide">
-                            READ MORE <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
-                    </div>
-                    @endif
-                </div>
+            {{-- SECTION HEADER --}}
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-bold rounded-full mb-4 shadow-lg animate-bounce-subtle">
+                    LATEST INSIGHTS
+                </span>
+                <h2 class="text-4xl md:text-6xl font-black mb-6 text-white leading-tight">
+                    Stories That Inspire<br>Your Journey
+                </h2>
+                <p class="text-lg text-white/80 max-w-2xl mx-auto">
+                    Explore expert insights, success stories, and trending topics in international education
+                </p>
             </div>
 
-            {{-- REMAINING POSTS GRID --}}
-            <div class="grid md:grid-cols-3 gap-8">
-                @foreach($latest_blogs->skip(1) as $blog)
-                <div class="bg-[#003B99] border border-white/5 rounded-3xl p-6 hover:border-white/20 transition duration-500 group flex flex-col h-full">
-                    
-                    {{-- Image --}}
-                    <div class="rounded-xl overflow-hidden mb-5 h-48 w-full relative">
-                        <img src="{{ Storage::url($blog->image) }}" class="w-full h-full object-cover transform group-hover:scale-105 transition duration-700">
-                        <div class="absolute top-3 right-3 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-lg text-xs font-bold text-white">
-                            {{ $blog->created_at->format('M d') }}
-                        </div>
-                    </div>
-
-                    {{-- Title --}}
-                    <h3 class="text-xl font-bold mb-3 line-clamp-2 group-hover:text-yellow-400 transition leading-snug">
-                        <a href="{{ route('blog.show', $blog->slug) }}">
-                            {{ $blog->title }}
-                        </a>
-                    </h3>
-
-                    {{-- Author --}}
-                    <div class="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <div class="w-6 h-6 rounded-full overflow-hidden bg-gray-700">
-                                <img src="{{ optional($blog->author)->avatar ? Storage::url($blog->author->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(optional($blog->author)->name ?? 'Admin') }}" class="w-full h-full object-cover">
-                            </div>
-                            <span class="text-xs font-semibold text-gray-400">{{ optional($blog->author)->name ?? 'Admin' }}</span>
-                        </div>
+            {{-- FEATURED POST (HERO STYLE) --}}
+            @php $featured = $latest_blogs->first(); @endphp
+            @if($featured)
+            <div class="mb-16">
+                <a href="{{ route('blog.show', $featured->slug) }}" class="group block">
+                    <div class="grid lg:grid-cols-2 gap-8 bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-transparent hover:border-blue-500/20 transition-all duration-500 hover:shadow-blue-500/20 hover:-translate-y-2">
                         
-                        <a href="{{ route('blog.show', $blog->slug) }}" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-yellow-400 hover:bg-yellow-400 hover:text-[#003B99] transition">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </a>
+                        {{-- Image Side --}}
+                        <div class="relative h-[400px] lg:h-full overflow-hidden">
+                            <img src="{{ asset('storage/' . ($featured->thumbnail ?? $featured->image)) }}" 
+                                 class="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-2 transition duration-700">
+                            
+                            {{-- Overlay Gradient --}}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            
+                            {{-- Featured Badge --}}
+                            <div class="absolute top-6 left-6 flex items-center gap-2 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-bold text-sm shadow-xl animate-pulse-slow">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                Featured
+                            </div>
+
+                            {{-- Date Badge --}}
+                            <div class="absolute bottom-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-sm font-bold text-gray-900 shadow-lg">
+                                {{ $featured->created_at->format('M d, Y') }}
+                            </div>
+                        </div>
+
+                        {{-- Content Side --}}
+                        <div class="p-8 lg:p-12 flex flex-col justify-center">
+                            
+                            {{-- Category Tag --}}
+                            <span class="inline-block w-fit px-4 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full mb-4 uppercase tracking-wider">
+                                Must Read
+                            </span>
+
+                            {{-- Title --}}
+                            <h3 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 group-hover:text-blue-600 transition leading-tight">
+                                {{ $featured->title }}
+                            </h3>
+
+                            {{-- Excerpt --}}
+                            <p class="text-gray-600 text-lg mb-6 leading-relaxed line-clamp-3">
+                                {{ Str::limit(strip_tags($featured->content), 180) }}
+                            </p>
+
+                            {{-- Author & CTA --}}
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <img src="{{ optional($featured->author)->avatar ? asset('storage/' . $featured->author->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(optional($featured->author)->name ?? 'Admin').'&background=3B82F6&color=fff' }}" 
+                                         class="w-12 h-12 rounded-full border-2 border-blue-200">
+                                    <div>
+                                        <p class="font-bold text-gray-900">{{ optional($featured->author)->name ?? 'Admin' }}</p>
+                                        <p class="text-xs text-gray-500">5 min read</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center gap-2 text-blue-600 font-bold group-hover:gap-4 transition-all">
+                                    <span>Read Story</span>
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </a>
+            </div>
+            @endif
+
+            {{-- REMAINING POSTS GRID - MODERN CARDS --}}
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                @foreach($latest_blogs->skip(1) as $index => $blog)
+                <a href="{{ route('blog.show', $blog->slug) }}" class="group block">
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-blue-200 hover:-translate-y-3 h-full flex flex-col">
+                        
+                        {{-- Image with Overlay --}}
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="{{ asset('storage/' . ($blog->thumbnail ?? $blog->image)) }}" 
+                                 class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
+                            
+                            {{-- Gradient Overlay --}}
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                            {{-- Date Badge --}}
+                            <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-bold text-gray-900 shadow-lg flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                {{ $blog->created_at->format('M d') }}
+                            </div>
+
+                            {{-- Color Accent (Different for each card) --}}
+                            @php
+                                $colors = ['from-blue-500', 'from-purple-500', 'from-pink-500', 'from-orange-500', 'from-green-500'];
+                                $color = $colors[$index % count($colors)];
+                            @endphp
+                            <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r {{ $color }} to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                        </div>
+
+                        {{-- Content --}}
+                        <div class="p-6 flex-1 flex flex-col">
+                            
+                            {{-- Title --}}
+                            <h3 class="text-xl font-bold mb-3 text-gray-900 group-hover:text-blue-600 transition line-clamp-2 leading-tight">
+                                {{ $blog->title }}
+                            </h3>
+
+                            {{-- Excerpt --}}
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed flex-1">
+                                {{ Str::limit(strip_tags($blog->content), 100) }}
+                            </p>
+
+                            {{-- Footer --}}
+                            <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                {{-- Author --}}
+                                <div class="flex items-center gap-2">
+                                    <img src="{{ optional($blog->author)->avatar ? asset('storage/' . $blog->author->avatar) : 'https://ui-avatars.com/api/?name='.urlencode(optional($blog->author)->name ?? 'Admin').'&background=random' }}" 
+                                         class="w-8 h-8 rounded-full border-2 border-gray-200">
+                                    <span class="text-xs font-semibold text-gray-700">{{ optional($blog->author)->name ?? 'Admin' }}</span>
+                                </div>
+
+                                {{-- Arrow Icon --}}
+                                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all transform group-hover:scale-110">
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
                 @endforeach
+            </div>
+
+            {{-- VIEW ALL BUTTON --}}
+            <div class="text-center mt-16">
+                <a href="{{ route('blog.index') }}" class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold px-10 py-5 rounded-full shadow-2xl hover:shadow-blue-500/50 transition-all duration-300 transform hover:scale-105 group">
+                    <span class="text-lg">Explore All Articles</span>
+                    <svg class="w-6 h-6 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
             </div>
 
         </div>
     </div>
 </section>
+
+{{-- Custom Animations --}}
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    @keyframes float-delayed {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(-5deg); }
+    }
+
+    @keyframes pulse-slow {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    @keyframes bounce-subtle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    .animate-float {
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .animate-float-delayed {
+        animation: float-delayed 10s ease-in-out infinite;
+    }
+
+    .animate-pulse-slow {
+        animation: pulse-slow 4s ease-in-out infinite;
+    }
+
+    .animate-bounce-subtle {
+        animation: bounce-subtle 2s ease-in-out infinite;
+    }
+</style>
 @endif
 
     {{-- 6. TESTIMONIALS --}}
@@ -466,64 +565,121 @@
         </div>
     </section>
 {{-- 
-    9. GLOBAL SCRIPT 
-    Initializes ALL sliders in one place to avoid conflicts.
+    PLACE THIS AT THE VERY BOTTOM OF home.blade.php
+    AFTER the testimonials section, BEFORE @endsection
 --}}
+
+{{-- Only load Swiper if hero slider didn't load it --}}
 @if(!isset($sliders) || $sliders->count() === 0)
+    @once
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    @endonce
 @endif
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        
-        // 1. Affiliate Ticker
-        const affiliateSwiper = new Swiper(".affiliateSwiper", {
-            slidesPerView: "auto",
-            spaceBetween: 0,
-            loop: true,
-            speed: 5000, 
-            allowTouchMove: false,
-            autoplay: { delay: 0, disableOnInteraction: false },
-        });
+(function() {
+    'use strict';
+    
+    function initOtherSliders() {
+        // Check if Swiper is loaded
+        if (typeof Swiper === 'undefined') {
+            setTimeout(initOtherSliders, 100);
+            return;
+        }
 
-        // 2. Destinations Slider
-        const destinationSwiper = new Swiper(".destinations-slider", {
-            slidesPerView: 1,
-            spaceBetween: 24,
-            loop: true,
-            observer: true,
-            observeParents: true,
-            autoplay: { delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true },
-            navigation: { nextEl: ".destination-next", prevEl: ".destination-prev" },
-            pagination: { el: ".destination-pagination", clickable: true, dynamicBullets: true },
-            breakpoints: {
-                640: { slidesPerView: 1, spaceBetween: 20 },
-                768: { slidesPerView: 2, spaceBetween: 24 },
-                1024: { slidesPerView: 4, spaceBetween: 24 },
-            },
-            on: {
-                slideChange: function () {
-                    const currentEl = document.querySelector('.current-slide-num');
-                    if(currentEl) currentEl.innerText = this.realIndex + 1;
-                }
+        // Wait for hero slider to initialize first (if exists)
+        const hasHeroSlider = document.querySelector('.proHeroSwiper');
+        const delay = hasHeroSlider ? 200 : 0;
+
+        setTimeout(function() {
+            
+            // 1. Affiliate Ticker
+            const affiliateEl = document.querySelector(".affiliateSwiper");
+            if (affiliateEl) {
+                new Swiper(".affiliateSwiper", {
+                    slidesPerView: "auto",
+                    spaceBetween: 0,
+                    loop: true,
+                    speed: 5000, 
+                    allowTouchMove: false,
+                    autoplay: { delay: 0, disableOnInteraction: false },
+                });
             }
-        });
 
-        // 3. Testimonial Slider
-        const testimonialSwiper = new Swiper(".testimonial-slider", {
-            slidesPerView: 1,
-            spaceBetween: 30,
-            loop: true,
-            observer: true,
-            observeParents: true,
-            autoplay: { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true },
-            pagination: { el: ".testimonial-pagination", clickable: true },
-            breakpoints: {
-                640: { slidesPerView: 1, spaceBetween: 20 },
-                768: { slidesPerView: 2, spaceBetween: 30 },
-                1024: { slidesPerView: 3, spaceBetween: 30 },
-            },
-        });
-    });
+            // 2. Destinations Slider
+            const destinationEl = document.querySelector(".destinations-slider");
+            if (destinationEl) {
+                new Swiper(".destinations-slider", {
+                    slidesPerView: 1,
+                    spaceBetween: 24,
+                    loop: true,
+                    observer: true,
+                    observeParents: true,
+                    autoplay: { 
+                        delay: 4000, 
+                        disableOnInteraction: false, 
+                        pauseOnMouseEnter: true 
+                    },
+                    navigation: { 
+                        nextEl: ".destination-next", 
+                        prevEl: ".destination-prev" 
+                    },
+                    pagination: { 
+                        el: ".destination-pagination", 
+                        clickable: true, 
+                        dynamicBullets: true 
+                    },
+                    breakpoints: {
+                        640: { slidesPerView: 1, spaceBetween: 20 },
+                        768: { slidesPerView: 2, spaceBetween: 24 },
+                        1024: { slidesPerView: 4, spaceBetween: 24 },
+                    },
+                    on: {
+                        slideChange: function () {
+                            const currentEl = document.querySelector('.current-slide-num');
+                            if(currentEl) currentEl.innerText = this.realIndex + 1;
+                        }
+                    }
+                });
+            }
+
+            // 3. Testimonial Slider (if you add it later)
+            const testimonialEl = document.querySelector(".testimonial-slider");
+            if (testimonialEl) {
+                new Swiper(".testimonial-slider", {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                    loop: true,
+                    observer: true,
+                    observeParents: true,
+                    autoplay: { 
+                        delay: 5000, 
+                        disableOnInteraction: false, 
+                        pauseOnMouseEnter: true 
+                    },
+                    pagination: { 
+                        el: ".testimonial-pagination", 
+                        clickable: true 
+                    },
+                    breakpoints: {
+                        640: { slidesPerView: 1, spaceBetween: 20 },
+                        768: { slidesPerView: 2, spaceBetween: 30 },
+                        1024: { slidesPerView: 3, spaceBetween: 30 },
+                    },
+                });
+            }
+            
+        }, delay);
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initOtherSliders);
+    } else {
+        initOtherSliders();
+    }
+})();
 </script>
+
 @endsection

@@ -2,9 +2,56 @@
 
 @section('content')
 
-<div class="bg-indigo-900 py-20 text-center text-white">
-    <h1 class="text-4xl font-bold mb-4">Language Training & Prep</h1>
-    <p class="text-xl text-indigo-200">Ace your IELTS, TOEFL, or learn a new language with us.</p>
+{{-- Language Training & Prep Header --}}
+<div class="w-full bg-white pt-5 pb-10">
+    
+    {{-- Container: Strictly 1400px max width --}}
+    <div class="max-w-[1400px] mx-auto px-4 md:px-6">
+        
+        {{-- Indigo Banner --}}
+        <div class="relative w-full bg-gradient-to-r from-indigo-900 to-indigo-700 rounded-[30px] overflow-hidden shadow-xl">
+            
+            {{-- 1. Background Image (Blended into the indigo) --}}
+            {{-- Using a generic study/library image as a placeholder --}}
+            <div class="absolute inset-0 z-0 opacity-20 mix-blend-overlay">
+                <img src="https://source.unsplash.com/random/1200x600/?books,studying"
+                     alt="Background Texture"
+                     class="w-full h-full object-cover grayscale">
+            </div>
+
+            {{-- 2. Decorative Line Pattern --}}
+            <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none z-0">
+                <svg class="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
+                    <defs>
+                        <pattern id="grid-pattern-lang" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M0 40L40 0H20L0 20M40 40V20L20 40" stroke="white" stroke-width="1" fill="none"/>
+                        </pattern>
+                    </defs>
+                    <path d="M0,400 C200,300 100,50 400,0 L0,0 Z" fill="url(#grid-pattern-lang)" />
+                </svg>
+            </div>
+
+            {{-- 3. Content --}}
+            <div class="relative z-10 py-16 md:py-24 text-center text-white px-4">
+                
+                {{-- Badge --}}
+                <span class="inline-block py-1.5 px-4 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-sm font-bold mb-6 uppercase tracking-wider shadow-sm">
+                    Skill Development
+                </span>
+
+                {{-- Title --}}
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight drop-shadow-md leading-tight">
+                    Language Training & Prep
+                </h1>
+                
+                {{-- Subtitle --}}
+                <p class="text-lg md:text-xl text-indigo-100/90 font-medium max-w-2xl mx-auto leading-relaxed">
+                    Ace your IELTS, TOEFL, or learn a new language with our expert guidance.
+                </p>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="max-w-[1400px] mx-auto px-4 py-16">

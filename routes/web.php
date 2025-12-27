@@ -14,6 +14,8 @@ use App\Http\Controllers\CareerController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\WorkPermitController;
+use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\DashboardController; // Assuming you have this
 
@@ -41,4 +43,7 @@ Route::get('/careers/{slug}', [CareerController::class, 'show'])->name('careers.
 Route::post('/inquiry/submit', [InquiryController::class, 'store'])->name('inquiry.store');
 Route::post('/career/apply', [JobApplicationController::class, 'store'])->name('career.apply');
 Route::post('/appointment/book', [AppointmentController::class, 'store'])->name('appointment.store');
+Route::get('/work-permit/{slug}', [WorkPermitController::class, 'show'])->name('work-permit.show');
+Route::get('/scholarships', [ScholarshipController::class, 'index'])->name('scholarships.index');
+Route::get('/scholarships/{slug}', [ScholarshipController::class, 'show'])->name('scholarships.show');
 

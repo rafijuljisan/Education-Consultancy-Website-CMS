@@ -6,6 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\MenuItem;
 use App\Models\GeneralSetting;
+use App\Models\Country; // Import Country Model
+use App\Models\WorkPermit;
+use App\Models\Gallery;
+use App\Observers\GalleryObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,22 +26,27 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // 3. Share 'settings' and 'menu_items' with ALL views automatically
+        Gallery::observe(GalleryObserver::class);
+        
         View::composer('*', function ($view) {
-            
-            // Get Site Settings (Cache it for performance if needed, but this is fine for now)
             $settings = GeneralSetting::first();
 
-            // Get Menu Items (Parents with Children)
             $menu_items = MenuItem::whereNull('parent_id')
-                            ->with('children')
-                            ->orderBy('sort_order')
-                            ->where('is_active', true)
-                            ->get();
+                ->with('children')
+                ->orderBy('sort_order')
+                ->get();
 
-            // Pass them to the view
+            // 1. Fetch Countries from Database (for the Dropdown)
+            // We merge countries from the 'Country' model and 'WorkPermit' model to ensure all are listed
+            $countries = Country::pluck('name')->toArray();
+            $wp_countries = WorkPermit::where('is_active', true)->pluck('country')->toArray();
+
+            // Merge, Unique, and Sort
+            $all_countries = collect(array_merge($countries, $wp_countries))->unique()->sort()->values();
+
             $view->with('settings', $settings)
-                 ->with('menu_items', $menu_items);
+                ->with('menu_items', $menu_items)
+                ->with('global_countries', $all_countries); // Pass to view
         });
     }
 }
