@@ -14,11 +14,13 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\ColorPicker;
 
+
 class EditGeneralSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+    protected static ?string $navigationGroup = 'Settings';
     protected static ?string $navigationLabel = 'Site Settings';
     protected static string $view = 'filament.pages.edit-general-settings';
     protected static ?string $title = 'Edit Website Settings';
@@ -63,7 +65,7 @@ class EditGeneralSettings extends Page implements HasForms
                         Textarea::make('contact_address')
                             ->rows(2)
                             ->columnSpanFull(),
-                        
+
                         // FIX APPLIED HERE: Removed 'Forms\Components\' prefix
                         Textarea::make('google_map_code')
                             ->label('Google Map Embed Code (<iframe>)')
@@ -116,6 +118,14 @@ class EditGeneralSettings extends Page implements HasForms
                         TextInput::make('hero_button_text'),
                         TextInput::make('hero_button_url'),
                     ])->columns(2),
+                Section::make('Analytics & Tracking')
+                    ->schema([
+                        TextInput::make('google_tag_manager_id')
+                            ->label('Google Tag Manager ID')
+                            ->placeholder('GTM-XXXXXX')
+                            ->helperText('Paste your Container ID here. Leave empty to disable tracking.')
+                            ->maxLength(20),
+                    ]),
             ])
             ->statePath('data');
     }

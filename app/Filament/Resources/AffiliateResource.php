@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 class AffiliateResource extends Resource
 {
     protected static ?string $model = Affiliate::class;
+    protected static ?string $navigationGroup = 'Course Management';
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
     protected static ?string $navigationLabel = 'Affiliate Universities';
     protected static ?int $navigationSort = 3;

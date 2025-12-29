@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+    <url>
+    <loc>http://127.0.0.1:8000</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/about-us</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/contact</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/services/student-visa-guidance</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/services/university-admissions</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/services/career-counseling</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/services/scholarship-support</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/destinations/usa</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/destinations/uk</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/destinations/canada</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/blog/5-reasons-to-study-in-uk</loc>
+            </url>
+    <url>
+    <loc>http://127.0.0.1:8000/blog/usa-study-visa-guide-2025</loc>
+            </url>
+</urlset>

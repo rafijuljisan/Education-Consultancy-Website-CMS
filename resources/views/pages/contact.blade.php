@@ -55,7 +55,7 @@
                     <div>
                         <h3 class="font-bold text-gray-900">Phone</h3>
                         <p class="text-gray-600">{{ $settings->contact_phone ?? 'Not Available' }}</p>
-                        <p class="text-gray-500 text-sm">Mon-Fri 9am to 6pm</p>
+                        <p class="text-gray-500 text-sm">Sat-Thu 10am to 7pm</p>
                     </div>
                 </div>
 

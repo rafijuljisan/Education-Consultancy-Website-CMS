@@ -17,6 +17,7 @@ class InquiryResource extends Resource
 {
     protected static ?string $model = Inquiry::class;
 
+    protected static ?string $navigationGroup = 'Inquiries & Applications';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
 

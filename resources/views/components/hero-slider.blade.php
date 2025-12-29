@@ -1,12 +1,13 @@
 @props(['sliders'])
 
 {{-- Clean Pro Hero Slider - Simplified --}}
-<div class="relative w-full h-[510px] md:h-[610px] lg:h-[710px] overflow-hidden bg-gray-900">
+<div class="relative w-full h-[515px] md:h-[615px] lg:h-[740px] overflow-hidden bg-gray-900">
 
     <div class="swiper proHeroSwiper w-full h-full">
         <div class="swiper-wrapper">
             @foreach($sliders as $slider)
-                <div class="swiper-slide relative w-full h-full flex items-center justify-center">
+                {{-- FIX APPLIED HERE: Added 'overflow-hidden' --}}
+                <div class="swiper-slide relative w-full h-full flex items-center justify-center overflow-hidden">
 
                     {{-- Background Image --}}
                     <div class="slide-bg absolute inset-0">
@@ -97,61 +98,51 @@
 @once
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <style>
-    /* Background Zoom Animation - Simple */
+    /* Background Zoom Animation */
+    .slide-bg {
+        width: 100%;
+        height: 100%;
+        overflow: hidden; /* Extra safety */
+    }
+    
     .slide-bg img {
         transition: transform 8s ease-out;
         object-fit: cover;
         width: 100%;
         height: 100%;
+        will-change: transform; /* Performance optimization */
     }
 
     .swiper-slide-active .slide-bg img {
         transform: scale(1.1);
     }
 
-    /* Pattern Overlay Animation */
+    /* Pattern Overlay Animation - FIXED */
     .pattern-overlay {
         background-image:
             repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, .03) 10px, rgba(255, 255, 255, .03) 20px),
             repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255, 255, 255, .03) 10px, rgba(255, 255, 255, .03) 20px);
+        background-size: 100% 100%; 
         animation: patternMove 20s linear infinite;
     }
 
+    /* FIXED ANIMATION: Uses background-position instead of transform to prevent overflow */
     @keyframes patternMove {
-        0% { transform: translate(0, 0); }
-        100% { transform: translate(50px, 50px); }
+        0% { background-position: 0 0; }
+        100% { background-position: 50px 50px; }
     }
 
-    /* Simple Fade In Animation for Text */
+    /* Text Animations */
     .slide-subtitle, .slide-title, .slide-desc, .slide-btn {
         opacity: 0;
         transform: translateY(20px);
         transition: all 0.8s ease-out;
     }
 
-    .swiper-slide-active .slide-subtitle {
-        opacity: 1;
-        transform: translateY(0);
-        transition-delay: 0.2s;
-    }
-
-    .swiper-slide-active .slide-title {
-        opacity: 1;
-        transform: translateY(0);
-        transition-delay: 0.4s;
-    }
-
-    .swiper-slide-active .slide-desc {
-        opacity: 1;
-        transform: translateY(0);
-        transition-delay: 0.6s;
-    }
-
-    .swiper-slide-active .slide-btn {
-        opacity: 1;
-        transform: translateY(0);
-        transition-delay: 0.8s;
-    }
+    .swiper-slide-active .slide-subtitle { opacity: 1; transform: translateY(0); transition-delay: 0.2s; }
+    .swiper-slide-active .slide-title { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
+    .swiper-slide-active .slide-desc { opacity: 1; transform: translateY(0); transition-delay: 0.6s; }
+    .swiper-slide-active .slide-btn { opacity: 1; transform: translateY(0); transition-delay: 0.8s; }
 
     /* Scroll Down Animation */
     @keyframes scroll {
@@ -177,19 +168,13 @@
     function initHeroSlider() {
         // Check if Swiper is loaded
         if (typeof Swiper === 'undefined') {
-            console.log('Swiper not loaded, retrying...');
             setTimeout(initHeroSlider, 100);
             return;
         }
 
         // Check if element exists
         const swiperEl = document.querySelector('.proHeroSwiper');
-        if (!swiperEl) {
-            console.log('Hero slider element not found');
-            return;
-        }
-
-        console.log('Initializing hero slider...');
+        if (!swiperEl) return;
 
         // Simple Swiper initialization
         const heroSwiper = new Swiper('.proHeroSwiper', {
@@ -223,21 +208,9 @@
             // Accessibility
             a11y: {
                 enabled: true
-            },
-            
-            // Events
-            on: {
-                init: function() {
-                    console.log('Hero slider initialized successfully');
-                    console.log('Total slides:', this.slides.length);
-                },
-                slideChange: function() {
-                    console.log('Slide changed to:', this.realIndex + 1);
-                }
             }
         });
 
-        // Store globally for debugging
         window.heroSwiper = heroSwiper;
     }
 

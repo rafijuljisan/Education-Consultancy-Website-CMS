@@ -17,6 +17,7 @@ class LanguageCourseResource extends Resource
 {
     protected static ?string $model = LanguageCourse::class;
 
+    protected static ?string $navigationGroup = 'Course Management';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

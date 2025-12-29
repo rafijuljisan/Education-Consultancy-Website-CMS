@@ -20,7 +20,7 @@ use Filament\Tables\Columns\ToggleColumn;
 class SliderResource extends Resource
 {
     protected static ?string $model = Slider::class;
-
+protected static ?string $navigationGroup = 'Site Content';
     // This icon will appear in your sidebar
     protected static ?string $navigationIcon = 'heroicon-o-photo';
     protected static ?string $navigationLabel = 'Home Sliders';

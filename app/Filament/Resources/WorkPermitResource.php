@@ -15,7 +15,7 @@ class WorkPermitResource extends Resource
 {
     protected static ?string $model = WorkPermit::class;
     protected static ?string $navigationIcon = 'heroicon-o-briefcase';
-    protected static ?string $navigationGroup = 'Services';
+    protected static ?string $navigationGroup = 'Inquiries & Applications';
     protected static ?string $navigationLabel = 'Work Permits';
 
     public static function form(Form $form): Form

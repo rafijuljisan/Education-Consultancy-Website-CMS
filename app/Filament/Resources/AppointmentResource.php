@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class AppointmentResource extends Resource
 {
     protected static ?string $model = Appointment::class;
-
+protected static ?string $navigationGroup = 'Inquiries & Applications';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

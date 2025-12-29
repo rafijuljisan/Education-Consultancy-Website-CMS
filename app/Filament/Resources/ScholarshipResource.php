@@ -15,7 +15,7 @@ class ScholarshipResource extends Resource
 {
     protected static ?string $model = Scholarship::class;
     protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
-    protected static ?string $navigationGroup = 'Services';
+    protected static ?string $navigationGroup = 'Inquiries & Applications';
 
     public static function form(Form $form): Form
     {
